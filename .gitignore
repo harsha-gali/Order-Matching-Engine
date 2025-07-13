@@ -1,0 +1,11 @@
+# Ignore executable files
+*.exe
+
+# Ignore CSV output files
+*.csv
+
+.vscode/
+
+# Ignore all Linux executables in root directory (by name)
+engine_demo
+client

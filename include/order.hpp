@@ -38,6 +38,8 @@ public:
     Order(std::string client_id, double price, int quantity, OrderSide side, OrderType type = OrderType::LIMIT);
     Order(std::string id, std::string client_id, double price, int quantity, OrderSide side, OrderType type = OrderType::LIMIT);
     virtual ~Order() ;
+    Order(Order&&) = default;
+    Order& operator=(Order&&) = default;
 
     const std::string& id() const { return id_; }
     const std::string& client_id() const { return client_id_; }

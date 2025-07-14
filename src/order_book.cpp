@@ -24,15 +24,15 @@ std::vector<Order> OrderBook::match_order(Order& incoming) {
                 Order consumed = std::move(top);
                 queue.pop_front();
 
-                consumed.set_quantity(traded_quantity);
-                matched.push_back(std::move(consumed));
-
                 Order remainder(
-                    top.id(), top.client_id(),
-                    top.price(), top.quantity() - traded_quantity,
-                    top.side()
+                    consumed.id(), consumed.client_id(),
+                    consumed.price(), consumed.quantity() - traded_quantity,
+                    consumed.side()
                 );
                 queue.push_front(std::move(remainder));
+
+                consumed.set_quantity(traded_quantity);
+                matched.push_back(std::move(consumed));
             }
 
             quantity_remaining -= traded_quantity;

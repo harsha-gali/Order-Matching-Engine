@@ -36,7 +36,7 @@ class Order {
 public:
     Order();
     Order(std::string client_id, double price, int quantity, OrderSide side, OrderType type = OrderType::LIMIT);
-    Order(std::string id, std::string client_id, double price, int quantity, OrderSide side, OrderType type = OrderType::LIMIT);
+    Order(std::string id, std::string client_id, double price, int quantity, OrderSide side, OrderType type = OrderType::LIMIT, std::chrono::system_clock::time_point timestamp = current_timestamp());
     virtual ~Order() ;
     Order(Order&&) = default;
     Order& operator=(Order&&) = default;

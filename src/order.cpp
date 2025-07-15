@@ -16,14 +16,14 @@ Order::Order(std::string client_id, double price, int quantity, OrderSide side, 
       type_(type),
       timestamp_(current_timestamp()) {}
 
-Order::Order(std::string id, std::string client_id, double price, int quantity, OrderSide side, OrderType type)
+Order::Order(std::string id, std::string client_id, double price, int quantity, OrderSide side, OrderType type, std::chrono::system_clock::time_point timestamp)
     : id_(std::move(id)),
       client_id_(std::move(client_id)),
       price_(price),
       quantity_(quantity),
       side_(side),
       type_(type),
-      timestamp_(current_timestamp()) {}
+      timestamp_(timestamp) {}
 
 std::string Order::to_string() const {
     std::ostringstream oss;

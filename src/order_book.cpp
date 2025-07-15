@@ -27,7 +27,9 @@ std::vector<Order> OrderBook::match_order(Order& incoming) {
                 Order remainder(
                     consumed.id(), consumed.client_id(),
                     consumed.price(), consumed.quantity() - traded_quantity,
-                    consumed.side()
+                    consumed.side(),
+                    consumed.type(),
+                    consumed.timestamp()
                 );
                 queue.push_front(std::move(remainder));
 

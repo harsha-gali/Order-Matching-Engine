@@ -12,8 +12,8 @@ constexpr int kSleepMs = 10;
 #include "platform.hpp"
 
 
-OrderServer::OrderServer(ThreadSafeQueue<Order>& input_queue, int port)
-    : input_queue_(input_queue), port_(port) {
+OrderServer::OrderServer(ThreadSafeQueue<Order>& input_queue, ThreadSafeQueue<Trade>& trade_queue, int port)
+    : input_queue_(input_queue), trade_queue_(trade_queue), port_(port) {
 #ifdef _WIN32
     WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
@@ -27,10 +27,6 @@ OrderServer::~OrderServer() {
 #ifdef _WIN32
     WSACleanup();
 #endif
-}
-
-void OrderServer::set_trade_queue(ThreadSafeQueue<Trade>& trade_queue) {
-    trade_queue_ = &trade_queue;
 }
 
 void OrderServer::start() {
@@ -130,12 +126,7 @@ void OrderServer::handle_client(SOCKET client_socket) {
 
 void OrderServer::send_trade_responses() {
     while (running_) {
-        if (!trade_queue_) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(kSleepMs));
-            continue;
-        }
-
-        auto trade = trade_queue_->try_pop();
+        auto trade = trade_queue_.try_pop();
         if (trade) {
             std::string msg = trade->to_string() + "\n";
 

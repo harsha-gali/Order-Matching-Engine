@@ -14,8 +14,7 @@ int main() {
     std::thread engine_thread(&MatchingEngine::run, &engine);
 
     // 2. Start the TCP order server
-    OrderServer server(order_input_queue, 54000);
-    server.set_trade_queue(trade_output_queue);
+    OrderServer server(order_input_queue, trade_output_queue, 54000);
     server.start();
 
     std::cout << "Order Matching Engine and TCP server started.\n";

@@ -24,7 +24,7 @@ public:
      * @param input_queue Thread-safe queue for submitting orders to the matching engine
      * @param port Listening port for incoming client connections (default: 54000)
      */
-    OrderServer(ThreadSafeQueue<Order>& input_queue, int port = 54000);
+    OrderServer(ThreadSafeQueue<Order>& input_queue, ThreadSafeQueue<Trade>& trade_queue, int port = 54000);
     ~OrderServer();
 
     /// Starts the server: accepts clients and spawns handler threads
@@ -32,9 +32,6 @@ public:
 
     /// Signals the server to stop and joins all threads
     void stop();
-
-    /// Sets the trade queue used for sending trade responses
-    void set_trade_queue(ThreadSafeQueue<Trade>& trade_queue);
 
     /// Writes all completed trades to a CSV file
     void write_trade_log_to_file(const std::string& filename) const;
@@ -59,7 +56,7 @@ private:
     mutable std::mutex socket_mutex_;
 
     ThreadSafeQueue<Order>& input_queue_;
-    ThreadSafeQueue<Trade>* trade_queue_ = nullptr;
+    ThreadSafeQueue<Trade>& trade_queue_;
 
     std::thread accept_thread_;
     std::thread response_thread_;
